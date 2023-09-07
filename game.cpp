@@ -58,6 +58,9 @@ int main(){
 	else
 		cout << "Character " << player3.getName() << " failed to save!" << endl << endl;
 
+	
+	player3.displayDateTimeOfLastSave();
+	player3.displayTimeSinceLastSave();
 
 	player3 = player3.loadFromFile("character.txt");
 	cout << player3;

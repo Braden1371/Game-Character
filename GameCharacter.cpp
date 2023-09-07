@@ -198,7 +198,7 @@ bool GameCharacter::saveToFile(string filename) {
 	outFile << attackPoints << endl;
 	outFile << defensePoints << endl;
 
-	lastSaveTime = time(nullptr);
+	lastSaveTime = time(0);
 
 	cout << "Saving " << name << "'s information to file" << endl;
 
@@ -239,4 +239,11 @@ void GameCharacter::displayDateTimeOfLastSave(){
 
 	else
 		cout << "Character has not been saved!" << endl;
+}
+
+void GameCharacter::displayTimeSinceLastSave() const{
+	time_t timeNow = time(0);
+	double diffTime = difftime(timeNow, lastSaveTime);
+
+	cout << "Time difference: " << diffTime << endl;
 }

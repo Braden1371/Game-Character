@@ -41,6 +41,7 @@ class GameCharacter{
 		bool saveToFile(string filename);
 		GameCharacter loadFromFile(string filename) const;
 		void displayDateTimeOfLastSave();
+		void displayTimeSinceLastSave() const;
 
 };
 #endif
