@@ -10,6 +10,7 @@
 #ifndef GAMECHARACTER_H
 #define GAMECHARACTER_H
 #include <iostream>
+#include <ctime>
 using namespace std;
 
 class GameCharacter{
@@ -20,6 +21,8 @@ class GameCharacter{
 		int attackPoints;
 		int defensePoints;
 		bool isAlive;
+		time_t lastSaveTime;
+
 
 	public:
 		GameCharacter(string cName, int health, int aPoints, int dPoints);
@@ -35,8 +38,9 @@ class GameCharacter{
 		bool operator<(const GameCharacter& rhs);
 		GameCharacter operator+(GameCharacter& rhs);
 		friend ostream& operator<<(ostream&, GameCharacter);
-		bool saveToFile(string filename) const;
+		bool saveToFile(string filename);
 		GameCharacter loadFromFile(string filename) const;
+		void displayDateTimeOfLastSave();
 
 };
 #endif

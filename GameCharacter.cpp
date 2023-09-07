@@ -10,6 +10,7 @@
 #include "GameCharacter.h"
 #include <iostream>
 #include <fstream>
+#include <ctime>
 using namespace std;
 
 //*********************************************************************************
@@ -184,7 +185,7 @@ ostream& operator<<(ostream& os, GameCharacter rhs){
 //    	true if file could be successfully opened.Takes in a string parameter for the
 //    	file name.
 //    Return value: boolean
-bool GameCharacter::saveToFile(string filename) const{
+bool GameCharacter::saveToFile(string filename) {
 	ofstream outFile(filename);
 
 	if(outFile.fail()){
@@ -196,6 +197,8 @@ bool GameCharacter::saveToFile(string filename) const{
 	outFile << maxHealth << endl;
 	outFile << attackPoints << endl;
 	outFile << defensePoints << endl;
+
+	lastSaveTime = time(nullptr);
 
 	cout << "Saving " << name << "'s information to file" << endl;
 
@@ -228,3 +231,12 @@ GameCharacter GameCharacter::loadFromFile(string filename) const{
 	return newCharacter;
 }
 
+void GameCharacter::displayDateTimeOfLastSave(){
+	if (lastSaveTime){
+		string readableTime = ctime(&lastSaveTime);
+		cout << readableTime << endl;
+	}
+
+	else
+		cout << "Character has not been saved!" << endl;
+}
