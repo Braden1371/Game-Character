@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <string>
 using namespace std;
 
 //*********************************************************************************
@@ -193,13 +194,20 @@ bool GameCharacter::saveToFile(string filename) {
 		return false;
 	}
 
+	lastSaveTime = time(0);
+	tm *save = localtime(&lastSaveTime);
 	outFile << name << endl;
 	outFile << maxHealth << endl;
 	outFile << attackPoints << endl;
 	outFile << defensePoints << endl;
-
-	lastSaveTime = time(0);
-
+	outFile << save->tm_wday << endl;
+	outFile << save->tm_mon << endl;
+	outFile << save->tm_mday << endl;
+	outFile << save->tm_hour << endl;
+	outFile << save->tm_min << endl;
+	outFile << save->tm_sec << endl;
+	outFile << save->tm_year << endl;
+	
 	cout << "Saving " << name << "'s information to file" << endl;
 
 	return true;
@@ -210,13 +218,13 @@ bool GameCharacter::saveToFile(string filename) {
 //    A function that loads a GameCharacter from a file. Takes in a string parameter
 //    	for the file name.
 //    Return value: GameCharacter
-GameCharacter GameCharacter::loadFromFile(string filename) const{
+GameCharacter GameCharacter::loadFromFile(string filename) {
 	ifstream inFile(filename);
 
 	if(inFile.fail()){
 		cout << "Failed to open input file." << endl;
 	}
-	string name;
+	string name, save;
 	int health, attack, defense;	
 
 	inFile >> name;
@@ -224,26 +232,56 @@ GameCharacter GameCharacter::loadFromFile(string filename) const{
 	inFile >> attack;
 	inFile >> defense;
 
+	struct tm saveOnFile;
+	inFile >> saveOnFile.tm_wday;
+        inFile >> saveOnFile.tm_mon; 
+	inFile >> saveOnFile.tm_mday; 
+	inFile >> saveOnFile.tm_hour; 
+	inFile >> saveOnFile.tm_min;
+        inFile >> saveOnFile.tm_sec;
+	inFile >> saveOnFile.tm_year;
+
 	GameCharacter newCharacter(name, health, attack, defense);
+	time_t previousSave = mktime(&saveOnFile);
+	newCharacter.setLastSave(previousSave);
 
 	cout << "Loading character information from file..." << endl;
 
 	return newCharacter;
 }
 
-void GameCharacter::displayDateTimeOfLastSave(){
+//******************************************************************************************
+//	displayDateOfLastSave()
+//	A function that displays the date and time the character was saved last, without
+//	  changing any values.
+//	 Return value: void
+void GameCharacter::displayDateTimeOfLastSave() const{
 	if (lastSaveTime){
-		string readableTime = ctime(&lastSaveTime);
-		cout << readableTime << endl;
+		char* saveTime = ctime(&lastSaveTime);
+		cout << name << " was last saved: " << saveTime << endl;
 	}
 
 	else
 		cout << "Character has not been saved!" << endl;
 }
 
+//*****************************************************************************************
+//	displayTimeSinceLastSave()
+//	A function that takes the difference from the last save and the time now.
+//	Return Value: void
 void GameCharacter::displayTimeSinceLastSave() const{
 	time_t timeNow = time(0);
-	double diffTime = difftime(timeNow, lastSaveTime);
+	//struct tm now  = (&timeNow);
+	double timeDiff = difftime(lastSaveTime, timeNow);
 
-	cout << "Time difference: " << diffTime << endl;
+	cout << "Time difference: " << timeDiff << " seconds" << endl;
+}
+
+//*******************************************************************************************
+//	setLastSave()
+//	A function that is a helper for the loadFromFile function. It sets the time 
+//	  of the last save from file. It takes a time_t type variable.
+//	Return value: void
+void GameCharacter::setLastSave(time_t lastSave) {
+	lastSaveTime = lastSave;
 }

@@ -39,9 +39,10 @@ class GameCharacter{
 		GameCharacter operator+(GameCharacter& rhs);
 		friend ostream& operator<<(ostream&, GameCharacter);
 		bool saveToFile(string filename);
-		GameCharacter loadFromFile(string filename) const;
-		void displayDateTimeOfLastSave();
+		GameCharacter loadFromFile(string filename);
+		void displayDateTimeOfLastSave() const;
 		void displayTimeSinceLastSave() const;
+		void setLastSave(time_t);
 
 };
 #endif

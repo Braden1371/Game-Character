@@ -16,6 +16,8 @@ int main(){
 	GameCharacter player1("Dave", 100, 80, 45);
 	GameCharacter player2("Shawn", 100, 75, 50);
 
+
+
 	//display characters before any attacks
 	cout << player1;
 	cout << player2;
@@ -26,6 +28,10 @@ int main(){
 
 	//add players together to create a new player
 	GameCharacter player3 = player1 + player2;
+
+	player3 = player3.loadFromFile("character.txt");
+	player3.displayDateTimeOfLastSave();
+	player3.displayTimeSinceLastSave();
 
 	//display new  character
 	cout << player3;
@@ -57,12 +63,12 @@ int main(){
 
 	else
 		cout << "Character " << player3.getName() << " failed to save!" << endl << endl;
+ 
+	player3 = player3.loadFromFile("character.txt");
 
-	
 	player3.displayDateTimeOfLastSave();
 	player3.displayTimeSinceLastSave();
 
-	player3 = player3.loadFromFile("character.txt");
 	cout << player3;
 
 	return 0;
